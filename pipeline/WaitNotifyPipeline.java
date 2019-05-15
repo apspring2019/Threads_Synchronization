@@ -17,7 +17,7 @@ public class WaitNotifyPipeline extends MyPipeline
 
     public synchronized Message receive() throws InterruptedException
     {
-        if (messageQueue.isEmpty())
+        while (messageQueue.isEmpty())
             this.wait();
         Message retVal = messageQueue.poll();
         this.notify();
@@ -26,7 +26,7 @@ public class WaitNotifyPipeline extends MyPipeline
 
     public synchronized void send(Message message) throws InterruptedException
     {
-        if (messageQueue.size() == maxCapacity)
+        while (messageQueue.size() == maxCapacity)
             this.wait();
         messageQueue.add(message);
         this.notify();
